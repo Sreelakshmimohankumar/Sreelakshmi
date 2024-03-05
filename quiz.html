@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="quizApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Quiz App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .quiz-container {
+            width: 400px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .options {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            cursor: pointer;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .score {
+            text-align: center;
+            font-size: 18px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="QuizController as quizCtrl" class="quiz-container">
+        <h2>Interactive Quiz App</h2>
+        <div class="question">{{ quizCtrl.currentQuestion.question }}</div>
+        <div class="options" ng-repeat="option in quizCtrl.currentQuestion.options">
+            <label>
+                <input type="radio" ng-model="quizCtrl.selectedOption" ng-value="option">
+                {{ option }}
+            </label>
+        </div>
+        <button ng-click="quizCtrl.checkAnswer()">Submit</button>
+        <div class="score" ng-show="quizCtrl.showScore">
+            Your score: {{ quizCtrl.score }}/{{ quizCtrl.totalQuestions }}
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('quizApp', [])
+            .controller('QuizController', function() {
+                var quizCtrl = this;
+
+                quizCtrl.questions = [
+                    {
+                        question: 'What is the capital of Japan?',
+                        options: ['Tokyo', 'Seoul', 'Beijing', 'Bangkok'],
+                        answer: 'Tokyo'
+                    },
+                    {
+                        question: 'Who wrote "To Kill a Mockingbird"?',
+                        options: ['Harper Lee', 'J.K. Rowling', 'Stephen King', 'Ernest Hemingway'],
+                        answer: 'Harper Lee'
+                    },
+                    {
+                        question: 'Which planet is known as the Red Planet?',
+                        options: ['Mars', 'Venus', 'Jupiter', 'Mercury'],
+                        answer: 'Mars'
+                    }
+                ];
+
+                quizCtrl.totalQuestions = quizCtrl.questions.length;
+                quizCtrl.currentQuestionIndex = 0;
+                quizCtrl.currentQuestion = quizCtrl.questions[quizCtrl.currentQuestionIndex];
+                quizCtrl.score = 0;
+                quizCtrl.showScore = false;
+
+                quizCtrl.checkAnswer = function() {
+                    if (quizCtrl.selectedOption === quizCtrl.currentQuestion.answer) {
+                        quizCtrl.score++;
+                    }
+                    quizCtrl.selectedOption = undefined;
+                    quizCtrl.currentQuestionIndex++;
+                    if (quizCtrl.currentQuestionIndex < quizCtrl.totalQuestions) {
+                        quizCtrl.currentQuestion = quizCtrl.questions[quizCtrl.currentQuestionIndex];
+                    } else {
+                        quizCtrl.showScore = true;
+                    }
+                };
+            });
+    </script>
+</body>
+</html>
