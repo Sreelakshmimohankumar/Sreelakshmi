@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="imageGalleryApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Gallery</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .image {
+            margin: 10px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .image img {
+            width: 500px;
+            height: 600px;
+            object-fit: cover;
+        }
+
+        .overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .image:hover .overlay {
+            opacity: 1;
+        }
+
+        .overlay h3 {
+            color: #fff;
+            text-align: center;
+        }
+
+        .details {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff;
+            padding: 20px;
+            border: 2px solid #333;
+            z-index: 1000;
+            display: none;
+        }
+
+        .details img {
+            max-width: 100%;
+            height: 200;
+            margin-bottom: 10px;
+        }
+
+        .details button {
+            padding: 5px 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
+
+        .details button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="ImageGalleryController as galleryCtrl" class="gallery">
+        <div class="image" ng-repeat="image in galleryCtrl.images" ng-click="galleryCtrl.showDetails(image)">
+            <img ng-src="{{image.url}}" alt="{{image.title}}">
+            <div class="overlay">
+                <h3>{{image.title}}</h3>
+            </div>
+        </div>
+        <div class="details" ng-show="galleryCtrl.selectedImage">
+            <h2>{{galleryCtrl.selectedImage.title}}</h2>
+            <img ng-src="{{galleryCtrl.selectedImage.url}}" alt="{{galleryCtrl.selectedImage.title}}">
+            <p>{{galleryCtrl.selectedImage.description}}</p>
+            <button ng-click="galleryCtrl.hideDetails()">Close</button>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('imageGalleryApp', [])
+            .controller('ImageGalleryController', function() {
+                var vm = this;
+
+                vm.images = [
+                    {
+                        title: 'Image 1',
+                        url: 'https://img.freepik.com/free-vector/floral-background-design_1262-2549.jpg?size=626&ext=jp',
+                        description: 'Description for Image 1'
+                    },
+                    {
+                        title: 'Image 2',
+                        url: 'https://img.freepik.com/free-vector/corner-frame-flowers-botanical_24877-81678.jpg?w=740&t=st=1709621250~exp=1709621850~hmac=4b6e50fc95281cd68d7428930e2579fe59cb669e4ae78bf3407cec19f75cb328',
+                        description: 'Description for Image 2'
+                    },
+                    {
+                        title: 'Image 3',
+                        url: 'https://img.freepik.com/free-photo/beautiful-gerbera-white_144627-24647.jpg?w=740&t=st=1709621306~exp=1709621906~hmac=e15f928990e38d4ff4c734b6f67bdc9b5c028c3a5074d92ef8440d9377f52b3f',
+                        description: 'Description for Image 3'
+                    }
+                ];
+
+                vm.showDetails = function(image) {
+                    vm.selectedImage = image;
+                };
+
+                vm.hideDetails = function() {
+                    vm.selectedImage = null;
+                };
+            });
+    </script>
+</body>
+</html>
