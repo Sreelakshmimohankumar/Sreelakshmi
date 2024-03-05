@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html ng-app="chatApp">
+<head>
+    <title>Real-time Chat App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        .message {
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .message.sender {
+            background-color: #c1e1c5;
+            align-self: flex-end;
+        }
+        .message.receiver {
+            background-color: #c9daff;
+            align-self: flex-start;
+        }
+        .message input[type="text"] {
+            width: calc(100% - 60px);
+            margin-right: 10px;
+        }
+        .message button {
+            width: 50px;
+        }
+    </style>
+</head>
+<body ng-controller="ChatController">
+    <div class="container">
+        <div class="message" ng-repeat="message in messages" ng-class="{'sender': message.senderId === myId, 'receiver': message.senderId !== myId}">
+            <strong>{{ message.sender }}</strong>: {{ message.text }}
+        </div>
+        <div class="message">
+            <input type="text" ng-model="newMessage" placeholder="Type your message..." ng-keypress="sendMessage($event)">
+            <button ng-click="sendMessage()">Send</button>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        var app = angular.module('chatApp', []);
+
+        app.controller('ChatController', function($scope) {
+            // Generate a random user ID for simplicity
+            $scope.myId = Math.floor(Math.random() * 1000);
+
+            // Dummy data for initial messages
+            $scope.messages = [
+                { senderId: 123, sender: 'Alice', text: 'Hello!' },
+                { senderId: 456, sender: 'Bob', text: 'Hi there!' }
+            ];
+
+            // Function to send a new message
+            $scope.sendMessage = function(event) {
+                if (event && event.type === 'keypress' && event.keyCode !== 13) {
+                    return; // Do nothing if keypress is not Enter
+                }
+                if ($scope.newMessage.trim() !== '') {
+                    $scope.messages.push({
+                        senderId: $scope.myId,
+                        sender: 'Me',
+                        text: $scope.newMessage.trim()
+                    });
+                    $scope.newMessage = '';
+
+                    // Here, you can implement logic to send the message to AI and get a response
+                    // For simplicity, let's assume the AI always responds with a fixed message
+                    $scope.messages.push({
+                        senderId: 'AI',
+                        sender: 'AI',
+                        text: 'I am an AI. I respond to your messages!'
+                    });
+                }
+            };
+        });
+    </script>
+</body>
+</html>
