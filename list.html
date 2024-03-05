@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="taskManager">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .container {
+      text-align: center;
+    }
+
+    h1 {
+      color: #333;
+    }
+
+    form input[type="text"] {
+      padding: 5px;
+      margin-bottom: 10px;
+    }
+
+    form button {
+      padding: 5px 10px;
+      background-color: #007bff;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+
+    li {
+      margin-bottom: 5px;
+    }
+
+    li span {
+      margin-right: 10px;
+    }
+
+    button.add {
+      padding: 3px 5px;
+      background-color: #28a745;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+
+    button.delete {
+      padding: 3px 5px;
+      background-color: #dc3545;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" ng-controller="TaskController as taskCtrl">
+    <h1>Task Manager</h1>
+    <form ng-submit="taskCtrl.addTask()">
+      <input type="text" ng-model="taskCtrl.newTask" placeholder="Add new task" required>
+      <button class="add" type="submit">Add Task</button>
+    </form>
+    <ul>
+      <li ng-repeat="task in taskCtrl.tasks">
+        <button class="delete" ng-click="taskCtrl.deleteTask(task)">Delete</button>
+        <span>{{task}}</span>
+      </li>
+    </ul>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    angular.module('taskManager', [])
+      .controller('TaskController', function() {
+        var vm = this;
+        vm.tasks = [];
+        vm.newTask = '';
+
+        vm.addTask = function() {
+          if (vm.newTask.trim() !== '') {
+            vm.tasks.push(vm.newTask);
+            vm.newTask = '';
+          }
+        };
+
+        vm.deleteTask = function(task) {
+          var index = vm.tasks.indexOf(task);
+          if (index !== -1) {
+            vm.tasks.splice(index, 1);
+          }
+        };
+      });
+  </script>
+</body>
+</html>
