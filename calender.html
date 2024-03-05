@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="eventCalendarApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Calendar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .calendar {
+            width: 90%;
+            max-width: 600px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        .month {
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .days {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .day {
+            width: calc(100% / 7);
+            text-align: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #ccc;
+        }
+
+        .day:hover {
+            background-color: #f0f0f0;
+        }
+
+        .events {
+            margin-top: 10px;
+        }
+
+        .event {
+            background-color: #007bff;
+            color: #fff;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            display: inline-block;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div ng-controller="EventCalendarController as calendarCtrl" class="calendar">
+        <div class="month">{{ calendarCtrl.currentMonth }}</div>
+        <div class="days">
+            <div class="day" ng-repeat="day in calendarCtrl.days">{{ day }}</div>
+        </div>
+        <div class="events">
+            <div class="event" ng-repeat="event in calendarCtrl.events" ng-click="calendarCtrl.editEvent(event)">
+                {{ event.title }}
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script>
+        angular.module('eventCalendarApp', [])
+            .controller('EventCalendarController', function() {
+                var calendarCtrl = this;
+
+                // Define the days of the week
+                calendarCtrl.days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+                // Define the current month (You can customize it based on your requirement)
+                calendarCtrl.currentMonth = 'March 2024';
+
+                // Define sample events (You can replace it with your own data)
+                calendarCtrl.events = [
+                    { title: 'Event 1', date: '2024-03-01' },
+                    { title: 'Event 2', date: '2024-03-10' },
+                    { title: 'Event 3', date: '2024-03-15' },
+                    { title: 'Event 4', date: '2024-03-22' }
+                ];
+
+                // Function to edit event
+                calendarCtrl.editEvent = function(event) {
+                    alert('Editing event: ' + event.title);
+                };
+            });
+    </script>
+</body>
+</html>
