@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="productCatalogApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Product Catalog</title>
+  <style>
+    /* CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      max-width: 800px;
+      margin: 20px auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+      text-align: center;
+    }
+    .filters {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+    select {
+      padding: 8px;
+      font-size: 16px;
+    }
+    .product {
+      border-bottom: 1px solid #ccc;
+      padding: 10px 0;
+    }
+    h2 {
+      margin: 0;
+    }
+    p {
+      margin: 5px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" ng-controller="ProductCatalogController as catalog">
+    <h1>Product Catalog</h1>
+    
+    <!-- Filters -->
+    <div class="filters">
+      <div>
+        <label for="categoryFilter">Filter by Category:</label>
+        <select id="categoryFilter" ng-model="catalog.selectedCategory" ng-options="category for category in catalog.categories">
+          <option value="">All</option>
+        </select>
+      </div>
+      <div>
+        <label for="featureFilter">Filter by Feature:</label>
+        <select id="featureFilter" ng-model="catalog.selectedFeature" ng-options="feature for feature in catalog.features">
+          <option value="">All</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Product list -->
+    <div>
+      <div class="product" ng-repeat="product in catalog.filteredProducts">
+        <h2>{{ product.name }}</h2>
+        <p>Category: {{ product.category }}</p>
+        <p>Price: {{ product.price | currency }}</p>
+        <p>Feature: {{ product.feature }}</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    // AngularJS application module
+    angular.module('productCatalogApp', [])
+
+    // AngularJS controller
+    .controller('ProductCatalogController', function() {
+      var catalog = this;
+
+      // Sample product data
+      catalog.products = [
+        { name: 'Product 1', category: 'Category 1', price: 10, feature: 'Feature A' },
+        { name: 'Product 2', category: 'Category 2', price: 20, feature: 'Feature B' },
+        // Add more products here
+      ];
+
+      // Extract categories and features from products
+      catalog.categories = Array.from(new Set(catalog.products.map(product => product.category)));
+      catalog.features = Array.from(new Set(catalog.products.map(product => product.feature)));
+
+      // Default selected category and feature
+      catalog.selectedCategory = '';
+      catalog.selectedFeature = '';
+
+      // Function to filter products based on selected category and feature
+      catalog.filterProducts = function() {
+        catalog.filteredProducts = catalog.products.filter(function(product) {
+          var categoryMatch = catalog.selectedCategory === '' || product.category === catalog.selectedCategory;
+          var featureMatch = catalog.selectedFeature === '' || product.feature === catalog.selectedFeature;
+          return categoryMatch && featureMatch;
+        });
+      };
+
+      // Initialize filtered products
+      catalog.filterProducts();
+    });
+  </script>
+</body>
+</html>
