@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="todoApp">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>To-Do List</title>
+  <style>
+    /* CSS styles */
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      background: #fff;
+      border-radius: 5px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    input[type="text"] {
+      width: calc(100% - 70px);
+      padding: 8px;
+      font-size: 16px;
+    }
+    button {
+      padding: 8px 20px;
+      font-size: 16px;
+    }
+    .todo-item {
+      padding: 10px;
+      margin-bottom: 10px;
+      background-color: #f9f9f9;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+      display: flex;
+      justify-content: space-between;
+    }
+    .todo-item.completed {
+      background-color: #e6e6e6;
+      text-decoration: line-through;
+    }
+    .delete-box {
+      cursor: pointer;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      color: white;
+      text-align: center;
+      border-radius: 50%;
+      line-height: 20px;
+    }
+    .delete-box:hover {
+      background-color: darkred;
+    }
+    .todo-list {
+      margin-top: 20px;
+    }
+    .completed-todos {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container" ng-controller="TodoController as todoCtrl">
+    <h1>To-Do List</h1>
+    <form ng-submit="todoCtrl.addTodo()">
+      <input type="text" ng-model="todoCtrl.newTodo" placeholder="Add new task">
+      <button type="submit">Add</button>
+    </form>
+    <div class="todo-list">
+      <h2>Remaining To-Do</h2>
+      <div class="todo-item" ng-repeat="todo in todoCtrl.todos | filter: {completed: false} track by $index">
+        <span>{{ todo.text }}</span>
+        <span class="delete-box" ng-click="todoCtrl.removeTodo($index)">X</span>
+      </div>
+    </div>
+    <div class="completed-todos">
+      <h2>Completed To-Do</h2>
+      <div class="todo-item completed" ng-repeat="todo in todoCtrl.todos | filter: {completed: true} track by $index">
+        <span>{{ todo.text }}</span>
+        <span class="delete-box" ng-click="todoCtrl.removeTodo($index)">X</span>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+  <script>
+    // AngularJS application module
+    angular.module('todoApp', [])
+
+    // AngularJS controller
+    .controller('TodoController', function() {
+      var todoCtrl = this;
+
+      // Array to store todos
+      todoCtrl.todos = [];
+
+      // Function to add a new todo
+      todoCtrl.addTodo = function() {
+        if (todoCtrl.newTodo.trim() !== '') {
+          todoCtrl.todos.push({ text: todoCtrl.newTodo, completed: false });
+          todoCtrl.newTodo = ''; // Clear input field
+        }
+      };
+
+      // Function to remove a todo
+      todoCtrl.removeTodo = function(index) {
+        todoCtrl.todos.splice(index, 1);
+      };
+    });
+  </script>
+</body>
+</html>
