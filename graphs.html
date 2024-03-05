@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html ng-app="dashboardApp">
+<head>
+    <title>Dashboard Analytics</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f2f2f2;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        h1 {
+            text-align: center;
+        }
+        .chart-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        .chart {
+            width: calc(50% - 20px);
+            margin-bottom: 20px;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+    </style>
+</head>
+<body ng-controller="DashboardController">
+    <div class="container">
+        <h1>Dashboard Analytics</h1>
+        
+        <div class="chart-container">
+            <div class="chart">
+                <h2>Revenue Chart</h2>
+                <canvas id="revenueChart"></canvas>
+            </div>
+            <div class="chart">
+                <h2>Customer Growth</h2>
+                <canvas id="customerGrowthChart"></canvas>
+            </div>
+            <div class="chart">
+                <h2>Product Sales</h2>
+                <canvas id="productSalesChart"></canvas>
+            </div>
+            <div class="chart">
+                <h2>Website Traffic</h2>
+                <canvas id="websiteTrafficChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
+    <script>
+        var app = angular.module('dashboardApp', []);
+
+        app.controller('DashboardController', function($scope) {
+            // Dummy data for charts
+            var revenueData = [2000, 3000, 4000, 3500, 5000, 6000];
+            var customerGrowthData = [100, 150, 200, 250, 300, 350];
+            var productSalesData = [50, 60, 70, 80, 90, 100];
+            var websiteTrafficData = [500, 600, 700, 800, 900, 1000];
+
+            // Revenue Chart
+            var revenueChart = new Chart(document.getElementById('revenueChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Revenue',
+                        data: revenueData,
+                        borderColor: 'blue',
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Customer Growth Chart
+            var customerGrowthChart = new Chart(document.getElementById('customerGrowthChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Customer Growth',
+                        data: customerGrowthData,
+                        backgroundColor: 'green',
+                        borderColor: 'green',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Product Sales Chart
+            var productSalesChart = new Chart(document.getElementById('productSalesChart').getContext('2d'), {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Product Sales',
+                        data: productSalesData,
+                        backgroundColor: 'orange',
+                        borderColor: 'orange',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+            // Website Traffic Chart
+            var websiteTrafficChart = new Chart(document.getElementById('websiteTrafficChart').getContext('2d'), {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Website Traffic',
+                        data: websiteTrafficData,
+                        borderColor: 'red',
+                        fill: false
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
